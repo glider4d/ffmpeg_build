@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/CMakeFiles/ffmpeg-populate-complete.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-build.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-configure.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-download.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-install.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-patch.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-test.rule"
+		},
+		{
+			"file" : "/home/glider/repo_emcc/ffmpeg_project/build/_deps/ffmpeg-subbuild/ffmpeg-populate-prefix/src/ffmpeg-populate-stamp/ffmpeg-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"ffmpeg-populate"
+		],
+		"name" : "ffmpeg-populate"
+	}
+}

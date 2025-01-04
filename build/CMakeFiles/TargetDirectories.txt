@@ -1,0 +1,3 @@
+/home/glider/repo_emcc/ffmpeg_project/build/CMakeFiles/simple_ffmpeg_player.dir
+/home/glider/repo_emcc/ffmpeg_project/build/CMakeFiles/edit_cache.dir
+/home/glider/repo_emcc/ffmpeg_project/build/CMakeFiles/rebuild_cache.dir
