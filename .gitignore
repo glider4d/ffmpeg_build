@@ -1,0 +1,88 @@
+# OS and compiler specific files
+*.o
+*.out
+*.a
+*.so
+*.lib
+*.exp
+*.manifest
+*.ilk
+*.pdb
+*.dll
+*.dylib
+
+# Build directories
+build/
+bin/
+Debug/
+Release/
+out/
+dist/
+
+# Generated files
+*.exe
+*.idb
+*.suo
+*.tlog
+*.user
+*.res
+*.resx
+*.pdb
+*.stackdump
+*.winmd
+
+# Dependency directories
+*.d
+deps/
+
+# CMake files
+CMakeFiles/
+cmake_install.cmake
+Makefile
+cmake-build-debug/
+cmake-build-release/
+
+# Windows specific files
+Thumbs.db
+ehthumbs.db
+*.user
+*.suo
+
+# Linux specific files
+*.swp
+*.swo
+*.bak
+*.class
+*.jar
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*~
+.DS_Store
+
+# Visual Studio files
+.vscode/
+.idea/
+*.sln
+*.suo
+*.user
+*.pb*
+*.db
+*.userosscache
+*.vspscc
+*.ntvs* 
+*.scc
+*.ncb
+*.ilk
+*.pdb
+*.exp
+*.lib
+*.manifest
+
+# Cache and temporary files
+*.pyc
+*.pyo
+*.swp
+*.swo
