@@ -99,6 +99,36 @@ add_custom_target (
     COMMENT "Building x264"
 )
 
+set(X265_DIR ${CMAKE_SOURCE_DIR}/external/x265)
+set(X265_LIB ${X265_DIR}/build/linux)
+set(X265_INCLUDE ${X265_LIB})
+set(X265_SRC ${X265_DIR}/source)
+
+# add_custom_command(
+#     OUTPUT ${X265_LIB}/libx265.a
+#            ${X265_LIB}/libx265.so
+#            ${X265_LIB}/x265
+#     WORKING_DIRECTORY ${X265_LIB}
+#     COMMAND ./make-Makefiles.bash
+    
+#     COMMAND make
+#     COMMENT "Compiling x265"
+# )
+
+# add_custom_target (
+#     x265 ALL
+#     DEPENDS ${X265_LIB}/libx265.a
+#             ${X265_LIB}/libx265.so
+#              ${X265_LIB}/x265
+#     COMMENT "Building x265"
+# )
+
+add_subdirectory(${X265_SRC} ${X265_LIB})
+# add_subdirectory("~/repo_emcc/ffmpeg_project/external/x265/build/linux")
+
+include_directories(${X265_INCLUDE})
+link_directories(${X265_LIB})
+
 
 
 add_custom_target(

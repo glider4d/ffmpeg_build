@@ -41,6 +41,7 @@ cmake_install.cmake
 Makefile
 cmake-build-debug/
 cmake-build-release/
+CMakeCache.txt
 
 # Windows specific files
 Thumbs.db
