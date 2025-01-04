@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
     }
 
     printf("Input file: %s\n", input_filename);
-    printf("Duration: %lld seconds\n", format_ctx->duration / AV_TIME_BASE);
+    printf("Duration: %ld seconds\n", format_ctx->duration / AV_TIME_BASE);
 
     avformat_close_input(&format_ctx);
     return 0;
