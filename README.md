@@ -5,4 +5,4 @@ sudo apt install -y libx264-dev libx265-dev libvpx-dev libfreetype6-dev libass-d
 sudo apt-get install nasm
 
 git subtree add --prefix=external/x264 https://code.videolan.org/videolan/x264.git master --squash
-git subtree add https://bitbucket.org/multicoreware/x265_git.git master --squash
+git subtree add --prefix=external/x265 https://bitbucket.org/multicoreware/x265_git.git master --squash
