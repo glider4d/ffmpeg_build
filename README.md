@@ -9,12 +9,11 @@ git subtree add --prefix=external/x265 https://bitbucket.org/multicoreware/x265_
                                          
 
 git subtree add --prefix=external/libvpx https://chromium.googlesource.com/webm/libvpx.git main --squash
-git subtree add --prefix=external/libfdk-aac https://github.com/mstorsjo/fdk-aac.git main --squash
+git subtree add --prefix=external/libfdk-aac https://github.com/mstorsjo/fdk-aac.git master --squash
+
+git subtree add --prefix=external/libopus https://github.com/xiph/opus.git master --squash
 
 
 
 
 
-
-autoreconf -fiv
-./configure --prefix="./build_lib" --disable-shared
