@@ -131,6 +131,63 @@ link_directories(${X265_LIB})
 
 
 
+set(LIBVPX_DIR ${CMAKE_SOURCE_DIR}/external/libvpx)
+set(LIBVPX_BUILD ${LIBVPX_DIR}/build_lib)
+set(LIBVPX_INCLUDE ${LIBVPX_BUILD}/include)
+set(LIBVPX_LIB ${LIBVPX_BUILD}/lib)
+
+file(MAKE_DIRECTORY ${LIBVPX_BUILD})
+
+add_custom_command(
+    OUTPUT ${LIBVPX_LIB}/libvpx.a    
+    COMMAND ./configure 
+    --prefix=${LIBVPX_BUILD} 
+    --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm 
+    COMMAND make
+    WORKING_DIRECTORY ${LIBVPX_DIR}
+    COMMAND make install
+    COMMENT "Compiling libvpx"
+)
+
+add_custom_target(
+    LIBVPX ALL
+    DEPENDS ${LIBVPX_LIB}/libvpx.a
+    COMMENT "Building libvpx"
+)
+
+include_directories(${LIBVPX_INCLUDE})
+link_directories(${LIBVPX_LIB})
+ 
+#################################libfdk-aac
+
+set(LIBFDKAAC_DIR ${CMAKE_SOURCE_DIR}/external/libfdk-aac)
+set(LIBFDKAAC_BUILD ${LIBFDKAAC_DIR}/build_lib)
+set(LIBFDKAAC_INCLUDE ${LIBFDKAAC_BUILD}/include)
+set(LIBFDKAAC_LIB ${LIBFDKAAC_BUILD}/lib)
+
+file(MAKE_DIRECTORY ${LIBFDKAAC_BUILD})
+
+add_custom_command(
+    OUTPUT ${LIBFDKAAC_LIB}/libfdk-aac.a    
+    COMMAND autoreconf -fiv
+    COMMAND ./configure 
+    --prefix=${LIBFDKAAC_BUILD} 
+    --disable-shared 
+    COMMAND make
+    WORKING_DIRECTORY ${LIBFDKAAC_DIR}
+    COMMAND make install
+    COMMENT "Compiling libfdk-aac"
+)
+
+add_custom_target(
+    LIBFDKAAC
+    DEPENDS ${LIBFDKAAC_LIB}/libfdk-aac.a
+    COMMENT "Building libfdk-aac"
+)
+
+include_directories(${LIBFDKAAC_INCLUDE})
+link_directories(${LIBFDKAAC_LIB})
+
 add_custom_target(
     FFmpeg
     # COMMAND ./configure --enable-gpl --enable-libx264 --enable-libmp3lame --enable-libvorbis --enable-openssl --enable-version3
