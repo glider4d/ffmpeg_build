@@ -18,6 +18,7 @@ Debug/
 Release/
 out/
 dist/
+external/
 
 # Generated files
 *.exe

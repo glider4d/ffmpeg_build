@@ -13,6 +13,9 @@ git subtree add --prefix=external/libfdk-aac https://github.com/mstorsjo/fdk-aac
 
 git subtree add --prefix=external/libopus https://github.com/xiph/opus.git main --squash
 
-git subtree add -prefix=external/aom https://aomedia.googlesource.com/aom.git master --squash
+git subtree add --prefix=external/aom https://aomedia.googlesource.com/aom.git main --squash
+=>
+libaom.a
 
 
+ 

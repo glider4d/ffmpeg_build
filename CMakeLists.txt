@@ -3,6 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 
 project(SimpleFFmpegPlayer)
 
+
+set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external)
+file(MAKE_DIRECTORY ${EXTERNAL_DIR})
+
 # ffmpeg path
 set(FFMPEG_INCLUDE_DIR external/ffmpeg)
 set(FFMPEG_DIR external/ffmpeg)
@@ -161,6 +165,29 @@ include_directories(${LIBOPUS_INCLUDE})
 link_directories(${LIBOPUS_LIB})
 
 #################################libopus END
+
+
+#################################aom BEGIN
+
+set(AOM_DIR ${CMAKE_SOURCE_DIR}/external/aom)
+set(AOM_BUILD ${AOM_DIR}/build)
+# set(AOM_LIB ${AOM_DIR}/build_lib)
+set(AOM_INCLUDE ${AOM_DIR}/aom)
+
+# file(MAKE_DIRECTORY ${AOM_LIB})
+file(MAKE_DIRECTORY ${AOM_BUILD})
+
+ 
+#add_subdirectory(
+#  ${AOM_DIR} ${AOM_BUILD}
+#)
+include_directories(${AOM_INCLUDE})
+link_directories(${AOM_BUILD})
+
+#################################aom END
+
+
+
 
 add_custom_target(
     FFmpeg
