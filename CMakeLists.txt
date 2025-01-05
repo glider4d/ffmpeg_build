@@ -126,6 +126,42 @@ link_directories(${LIBFDKAAC_LIB})
 
 #################################libfdk-aac END
 
+#################################libopus BEGIN
+
+set(LIBOPUS_DIR ${CMAKE_SOURCE_DIR}/external/libopus)
+set(LIBOPUS_BUILD ${LIBOPUS_DIR}/build_lib)
+set(LIBOPUS_INCLUDE ${LIBOPUS_BUILD}/include)
+set(LIBOPUS_LIB ${LIBOPUS_BUILD}/lib)
+
+file(MAKE_DIRECTORY ${LIBOPUS_BUILD})
+
+# ./autogen.sh && \
+# ./configure --prefix="$HOME/ffmpeg_build" --disable-shared && \
+
+
+add_custom_command(
+    OUTPUT ${LIBOPUS_LIB}/libopus.a    
+    COMMAND ./autogen.sh
+    COMMAND ./configure 
+    --prefix=${LIBOPUS_BUILD} 
+    --disable-shared 
+    COMMAND make
+    WORKING_DIRECTORY ${LIBOPUS_DIR}
+    COMMAND make install
+    COMMENT "Compiling libopus"
+)
+
+add_custom_target(
+    LIBOPUS ALL
+    DEPENDS ${LIBOPUS_LIB}/libopus.a
+    COMMENT "Building libopus"
+)
+
+include_directories(${LIBOPUS_INCLUDE})
+link_directories(${LIBOPUS_LIB})
+
+#################################libopus END
+
 add_custom_target(
     FFmpeg
     COMMAND ./configure --prefix=$(pwd)/install --enable-shared --enable-gpl --enable-libx264 --enable-libmp3lame --enable-libvorbis --enable-openssl --enable-version3
