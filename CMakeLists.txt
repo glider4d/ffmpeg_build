@@ -185,6 +185,28 @@ link_directories(${AOM_BUILD})
 #################################aom END
 
 
+
+
+#################################libsvtav1  BEGIN
+
+set(LIBSVTAV1_DIR ${CMAKE_SOURCE_DIR}/external/libsvtav1 )
+set(LIBSVTAV1_BUILD ${LIBSVTAV1_DIR}/build)
+# set(AOM_LIB ${AOM_DIR}/build_lib)
+set(LIBSVTAV1_INCLUDE ${LIBSVTAV1_DIR}/Source/API)
+
+# file(MAKE_DIRECTORY ${AOM_LIB})
+file(MAKE_DIRECTORY ${LIBSVTAV1_BUILD})
+
+ 
+add_subdirectory(
+ ${LIBSVTAV1_DIR} ${LIBSVTAV1_BUILD}
+)
+include_directories(${LIBSVTAV1_INCLUDE})
+link_directories(${LIBSVTAV1_DIR/Bin/Release)
+
+#################################libsvtav1  END
+
+
 #################################libdav1d  BEGIN
 
 set(LIBDAV1D_DIR ${CMAKE_SOURCE_DIR}/external/dav1d )
@@ -198,13 +220,10 @@ file(MAKE_DIRECTORY ${LIBDAV1D_LIB})
 
 
  
-# meson setup -Denable_tools=false -Denable_tests=false --default-library=static .. --prefix "$HOME/ffmpeg_build" --libdir="$HOME/ffmpeg_build/lib" && \
-# ninja && \
-# ninja install
+
 
 add_custom_command(
     OUTPUT ${LIBDAV1D_LIB}/libdav1d.a    
-    # COMMAND meson setup -Denable_tools=false -Denable_tests=false --default-library=static ${LIBDAV1D_DIR} ${LIBDAV1D_BUILD}  --prefix ${LIBDAV1D_BUILD} --libdir=${LIBDAV1D_BUILD}
     COMMAND meson setup -Denable_tools=false -Denable_tests=false --default-library=static ${LIBDAV1D_DIR} --prefix ${LIBDAV1D_LIB} --libdir=${LIBDAV1D_LIB}    
     WORKING_DIRECTORY ${LIBDAV1D_BUILD}
     COMMAND ninja
@@ -212,7 +231,6 @@ add_custom_command(
     COMMENT "Compiling libdav1d"
 )
 
-# meson setup -Denable_tools=false -Denable_tests=false --default-library=static ~/test/dav1d ~/build/dav1d --prefix "$HOME/ffmpeg_build" --libdir="$HOME/ffmpeg_build/lib"
 
 
 add_custom_target(
