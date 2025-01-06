@@ -22,3 +22,4 @@ git subtree add --prefix=external/libsvtav1 https://gitlab.com/AOMediaCodec/SVT-
 git subtree add --prefix=external/dav1d https://code.videolan.org/videolan/dav1d.git master --squash
 
 
+git subtree add --prefix=external/vmaf https://github.com/Netflix/vmaf master --squash

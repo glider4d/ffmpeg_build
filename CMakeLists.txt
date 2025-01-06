@@ -202,7 +202,7 @@ add_subdirectory(
  ${LIBSVTAV1_DIR} ${LIBSVTAV1_BUILD}
 )
 include_directories(${LIBSVTAV1_INCLUDE})
-link_directories(${LIBSVTAV1_DIR/Bin/Release)
+link_directories(${LIBSVTAV1_DIR}/Bin/Release)
 
 #################################libsvtav1  END
 
@@ -243,6 +243,11 @@ include_directories(${LIBDAV1D_INCLUDE})
 link_directories(${LIBDAV1D_LIB})
 
 #################################libdav1d  END
+
+
+#################################libvmaf BEGIN
+
+#################################libvmaf END
 
 
 
