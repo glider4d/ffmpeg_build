@@ -7,10 +7,7 @@ project(SimpleFFmpegPlayer)
 set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external)
 file(MAKE_DIRECTORY ${EXTERNAL_DIR})
 
-# ffmpeg path
-set(FFMPEG_INCLUDE_DIR external/ffmpeg)
-set(FFMPEG_DIR external/ffmpeg)
-set(FFMPEG_LIB_DIR external/ffmpeg/lib)
+
 
 
 
@@ -246,10 +243,49 @@ link_directories(${LIBDAV1D_LIB})
 
 
 #################################libvmaf BEGIN
+set(LIBVMAF_DIR ${CMAKE_SOURCE_DIR}/external/vmaf/libvmaf )
+set(LIBVMAF_BUILD ${LIBVMAF_DIR}/build_lib)
 
+
+set(LIBVMAF_BIN ${LIBVMAF_BUILD}/bin)
+set(LIBVMAF_LIB ${LIBVMAF_BUILD}/lib)
+set(LIBVMAF_INCLUDE ${LIBVMAF_BUILD}/include)
+
+file(MAKE_DIRECTORY ${LIBVMAF_BUILD})
+file(MAKE_DIRECTORY ${LIBVMAF_LIB})
+file(MAKE_DIRECTORY ${LIBVMAF_BIN})
+
+
+ 
+
+
+add_custom_command (
+    OUTPUT ${LIBVMAF_LIB}/libvmaf.a    
+    COMMAND meson setup -Denable_tests=false -Denable_docs=false  --buildtype=release --default-library=static ${LIBVMAF_DIR} --prefix ${LIBVMAF_LIB} --bindir=${LIBVMAF_BIN} --libdir=${LIBVMAF_LIB}  
+    WORKING_DIRECTORY ${LIBVMAF_BUILD}
+    COMMAND ninja
+    COMMAND ninja install
+    COMMENT "Compiling libvmaf"
+)
+
+
+
+add_custom_target(
+    LIBVMAF ALL
+    DEPENDS ${LIBVMAF_LIB}/libvmaf.a
+    COMMENT "Building libvmaf"
+)
+
+include_directories(${LIBVMAF_INCLUDE})
+link_directories(${LIBVMAF_LIB})
 #################################libvmaf END
 
+#################################ffmpeg BEGIN
 
+# ffmpeg path
+set(FFMPEG_INCLUDE_DIR external/ffmpeg)
+set(FFMPEG_DIR external/ffmpeg)
+set(FFMPEG_LIB_DIR external/ffmpeg/lib)
 
 add_custom_target(
     FFmpeg
@@ -259,6 +295,7 @@ add_custom_target(
     COMMENT "Compiling FFmpeg"
 )
 
+#################################ffmpeg END
 
 
 # main executable
