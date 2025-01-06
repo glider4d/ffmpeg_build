@@ -7,7 +7,11 @@ project(SimpleFFmpegPlayer)
 set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external)
 file(MAKE_DIRECTORY ${EXTERNAL_DIR})
 
-
+add_custom_target(run_script ALL
+    COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/init.sh
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running iniy.sh"
+)
 
 
 
@@ -173,9 +177,9 @@ set(AOM_INCLUDE ${AOM_DIR}/aom)
 file(MAKE_DIRECTORY ${AOM_BUILD})
 
  
-#add_subdirectory(
-#  ${AOM_DIR} ${AOM_BUILD}
-#)
+add_subdirectory(
+  ${AOM_DIR} ${AOM_BUILD}
+)
 include_directories(${AOM_INCLUDE})
 link_directories(${AOM_BUILD})
 
