@@ -17,5 +17,8 @@ git subtree add --prefix=external/aom https://aomedia.googlesource.com/aom.git m
 =>
 libaom.a
 
+git subtree add -prefix=external/libsvtav1 https://gitlab.com/AOMediaCodec/SVT-AV1.git master --squash
 
- 
+git subtree add --prefix=external/dav1d https://code.videolan.org/videolan/dav1d.git master --squash
+
+

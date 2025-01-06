@@ -139,9 +139,7 @@ set(LIBOPUS_LIB ${LIBOPUS_BUILD}/lib)
 
 file(MAKE_DIRECTORY ${LIBOPUS_BUILD})
 
-# ./autogen.sh && \
-# ./configure --prefix="$HOME/ffmpeg_build" --disable-shared && \
-
+ 
 
 add_custom_command(
     OUTPUT ${LIBOPUS_LIB}/libopus.a    
@@ -186,6 +184,47 @@ link_directories(${AOM_BUILD})
 
 #################################aom END
 
+
+#################################libdav1d  BEGIN
+
+set(LIBDAV1D_DIR ${CMAKE_SOURCE_DIR}/external/dav1d )
+set(LIBDAV1D_BUILD ${LIBDAV1D_DIR}/build_lib)
+
+set(LIBDAV1D_LIB ${LIBDAV1D_BUILD}/lib)
+set(LIBDAV1D_INCLUDE ${LIBDAV1D_LIB}/include)
+
+file(MAKE_DIRECTORY ${LIBDAV1D_BUILD})
+file(MAKE_DIRECTORY ${LIBDAV1D_LIB})
+
+
+ 
+# meson setup -Denable_tools=false -Denable_tests=false --default-library=static .. --prefix "$HOME/ffmpeg_build" --libdir="$HOME/ffmpeg_build/lib" && \
+# ninja && \
+# ninja install
+
+add_custom_command(
+    OUTPUT ${LIBDAV1D_LIB}/libdav1d.a    
+    # COMMAND meson setup -Denable_tools=false -Denable_tests=false --default-library=static ${LIBDAV1D_DIR} ${LIBDAV1D_BUILD}  --prefix ${LIBDAV1D_BUILD} --libdir=${LIBDAV1D_BUILD}
+    COMMAND meson setup -Denable_tools=false -Denable_tests=false --default-library=static ${LIBDAV1D_DIR} --prefix ${LIBDAV1D_LIB} --libdir=${LIBDAV1D_LIB}    
+    WORKING_DIRECTORY ${LIBDAV1D_BUILD}
+    COMMAND ninja
+    COMMAND ninja install
+    COMMENT "Compiling libdav1d"
+)
+
+# meson setup -Denable_tools=false -Denable_tests=false --default-library=static ~/test/dav1d ~/build/dav1d --prefix "$HOME/ffmpeg_build" --libdir="$HOME/ffmpeg_build/lib"
+
+
+add_custom_target(
+    LIBDAV1D ALL
+    DEPENDS ${LIBDAV1D_LIB}/libdav1d.a
+    COMMENT "Building libdav1d"
+)
+
+include_directories(${LIBDAV1D_INCLUDE})
+link_directories(${LIBDAV1D_LIB})
+
+#################################libdav1d  END
 
 
 
