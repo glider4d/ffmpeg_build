@@ -10,6 +10,6 @@ git subtree add --prefix=external/aom https://aomedia.googlesource.com/aom.git m
 git subtree add --prefix=external/libsvtav1 https://gitlab.com/AOMediaCodec/SVT-AV1.git master --squash || echo "Worktree already exists. Skipping."
 git subtree add --prefix=external/dav1d https://code.videolan.org/videolan/dav1d.git master --squash || echo "Worktree already exists. Skipping."
 git subtree add --prefix=external/vmaf https://github.com/Netflix/vmaf master --squash || echo "Worktree already exists. Skipping."
-
+git subtree add --prefix=external/ffmpeg https://github.com/FFmpeg/FFmpeg.git master --squash || echo "Worktree already exists. Skipping."
 
 exit 0

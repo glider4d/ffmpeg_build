@@ -482,13 +482,165 @@ set(FFMPEG_INCLUDE_DIR external/ffmpeg)
 set(FFMPEG_DIR external/ffmpeg)
 set(FFMPEG_LIB_DIR external/ffmpeg/lib)
 
-add_custom_target(
-    FFmpeg
-    COMMAND ./configure --prefix=$(pwd)/install --enable-shared --enable-gpl --enable-libx264 --enable-libmp3lame --enable-libvorbis --enable-openssl --enable-version3
-    COMMAND make -j$(nproc)
-    WORKING_DIRECTORY ../external/ffmpeg
-    COMMENT "Compiling FFmpeg"
+# add_custom_target(
+#     FFmpeg
+#     COMMAND ./configure --prefix=$(pwd)/install --enable-shared --enable-gpl --enable-libx264 --enable-libmp3lame --enable-libvorbis --enable-openssl --enable-version3
+#     COMMAND make -j$(nproc)
+#     WORKING_DIRECTORY ../external/ffmpeg
+#     COMMENT "Compiling FFmpeg"
+# )
+
+
+# ./update_pc.sh ~/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig /home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/
+add_custom_target(update_pc ALL
+    COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/update_pc.sh ${FFMPEG_BUILD}/lib/pkgconfig ${FFMPEG_BUILD}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    COMMENT "Running update_pc.sh"
 )
+
+# add_custom_target(configure_ffmpeg ALL
+#     COMMAND ${CMAKE_COMMAND} -E env
+#             PKG_CONFIG_PATH="${FFMPEG_BUILD}/lib/pkgconfig"
+#             ./configure
+#             --prefix="${FFMPEG_BUILD}"
+#             --pkg-config-flags="--static"
+#             --extra-cflags="-I${FFMPEG_BUILD}/include"
+#             --extra-ldflags="-L${FFMPEG_BUILD}/lib"
+#             --extra-libs="-lpthread -lm"
+#             --ld="g++"
+#             --enable-gpl
+#             --enable-gnutls
+#             --enable-libaom
+#             --enable-libass
+#             --enable-libfdk-aac
+#             --enable-libfreetype
+#             --enable-libmp3lame
+#             --enable-libopus
+#             --enable-libsvtav1
+#             --enable-libdav1d
+#             --enable-libvorbis
+#             --enable-libvpx
+#             --enable-libx264
+#             --enable-libx265
+#             --enable-nonfree
+#     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+#     COMMENT "Running FFmpeg configure script"
+# )
+# add_custom_target(configure_ffmpeg ALL
+#     COMMAND ${CMAKE_COMMAND} -E env
+#             PKG_CONFIG_PATH="${FFMPEG_BUILD}/lib/pkgconfig"
+#             /bin/bash -c "./configure \
+#             --prefix=${FFMPEG_BUILD} \
+#             --pkg-config-flags=--static \
+#             --extra-cflags=-I${FFMPEG_BUILD}/include \
+#             --extra-ldflags=-L${FFMPEG_BUILD}/lib \
+#             --extra-libs=-lpthread -lm \
+#             --ld=g++ \
+#             --enable-gpl \
+#             --enable-gnutls \
+#             --enable-libaom \
+#             --enable-libass \
+#             --enable-libfdk-aac \
+#             --enable-libfreetype \
+#             --enable-libmp3lame \
+#             --enable-libopus \
+#             --enable-libsvtav1 \
+#             --enable-libdav1d \
+#             --enable-libvorbis \
+#             --enable-libvpx \
+#             --enable-libx264 \
+#             --enable-libx265 \
+#             --enable-nonfree"
+#     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+#     COMMENT "Running FFmpeg configure script"
+# )
+
+# add_custom_target(configure_ffmpeg ALL
+#     COMMAND ${CMAKE_COMMAND} -E env
+#             PKG_CONFIG_PATH="${FFMPEG_BUILD}/lib/pkgconfig"
+#             /bin/bash -c "./configure \
+#             --prefix=${FFMPEG_BUILD} \
+#             --pkg-config-flags=--static \
+#             --extra-cflags=-I${FFMPEG_BUILD}/include \
+#             --extra-ldflags=-L${FFMPEG_BUILD}/lib \
+#             --extra-libs=-lpthread \
+#             --ld=g++ \
+#             --enable-gpl \
+#             --enable-gnutls \
+#             --enable-libaom \
+#             --enable-libass \
+#             --enable-libfdk-aac \
+#             --enable-libfreetype \
+#             --enable-libmp3lame \
+#             --enable-libopus \
+#             --enable-libsvtav1 \
+#             --enable-libdav1d \
+#             --enable-libvorbis \
+#             --enable-libvpx \
+#             --enable-libx264 \
+#             --enable-libx265 \
+#             --enable-nonfree"
+#     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+#     COMMENT "Running FFmpeg configure script"
+# )
+# add_custom_target(configure_ffmpeg ALL
+#      COMMAND ${CMAKE_COMMAND} -E env
+#              PKG_CONFIG_PATH="${FFMPEG_BUILD}/lib/pkgconfig"
+#              /bin/bash -c "./configure \
+#              --prefix=${FFMPEG_BUILD} \
+#              --pkg-config-flags=--static \
+#              --extra-cflags=-I${FFMPEG_BUILD}/include \
+#              --extra-ldflags=-L${FFMPEG_BUILD}/lib \
+#              --extra-libs=-lpthread \
+#              --ld=g++ \
+#              --enable-gpl \
+#              --enable-gnutls \
+#              --enable-libaom \#  # This line has been commented out as per request
+#              --enable-libass \
+#              --enable-libfdk-aac \
+#              --enable-libfreetype \
+#              --enable-libmp3lame \
+#              --enable-libopus \
+#              --enable-libsvtav1 \
+#              --enable-libdav1d \
+#              --enable-libvorbis \
+#              --enable-libvpx \
+#              --enable-libx264 \
+#              --enable-libx265 \
+#              --enable-nonfree"
+#      WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+#      COMMENT "Running FFmpeg configure script"
+#  )
+
+add_custom_target(configure_ffmpeg ALL
+     COMMAND ${CMAKE_COMMAND} -E env
+             PKG_CONFIG_PATH="/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig" 
+             /bin/bash -c "./configure \
+             --prefix='/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build' \
+             --pkg-config-flags='--static' \
+             --extra-cflags='-I/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/include' \
+             --extra-ldflags='-L/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib' \
+             --extra-libs='-lpthread -lm' \
+             --ld='g++' \
+             --enable-gpl \
+             --enable-gnutls \
+             --enable-libaom \
+             --enable-libass \
+             --enable-libfdk-aac \
+             --enable-libfreetype \
+             --enable-libmp3lame \
+             --enable-libopus \
+             --enable-libsvtav1 \
+             --enable-libdav1d \
+             --enable-libvorbis \
+             --enable-libvpx \
+             --enable-libx264 \
+             --enable-libx265 \
+             --enable-nonfree"
+     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+     COMMENT "Running FFmpeg configure script"
+ )
+
 
 #################################ffmpeg END
 
