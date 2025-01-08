@@ -74,7 +74,28 @@ set(X265_INCLUDE ${X265_DIR}/source)
 set(X265_SRC ${X265_DIR}/source)
 
 set(PKG_CONFIG_NAME x265)
-add_subdirectory(${X265_SRC} ${X265_LIB})
+# add_subdirectory(${X265_SRC} ${X265_LIB})
+
+
+# PATH="$HOME/bin:$PATH" cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DENABLE_SHARED=off ../../source && \
+# PATH="$HOME/bin:$PATH" make && \
+# make install
+
+add_custom_command(
+    OUTPUT ${X265_LIB}/libx265.a    
+    COMMAND cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${FFMPEG_BUILD}" -DENABLE_SHARED=off ../../source
+    COMMAND make
+    WORKING_DIRECTORY ${X265_LIB}
+    # COMMAND make install
+    COMMENT "Compiling libx265"
+)
+
+add_custom_target(
+    LIBX265 ALL
+    DEPENDS ${X265_LIB}/libx265.a
+    COMMENT "Building libx265"
+)
+
 
 include_directories(${X265_INCLUDE})
 link_directories(${X265_LIB})
@@ -189,9 +210,25 @@ set(AOM_INCLUDE ${AOM_DIR}/aom)
 file(MAKE_DIRECTORY ${AOM_BUILD})
 
 set(PKG_CONFIG_NAME aom) 
-add_subdirectory(
-  ${AOM_DIR} ${AOM_BUILD}
+# add_subdirectory(
+#   ${AOM_DIR} ${AOM_BUILD}
+# )
+
+add_custom_command(
+    OUTPUT ${AOM_BUILD}/libaom.a    
+    COMMAND cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${FFMPEG_BUILD}" -DENABLE_TESTS=OFF -DENABLE_NASM=on ${AOM_DIR}
+    COMMAND make
+    WORKING_DIRECTORY ${AOM_BUILD}
+    # COMMAND make install
+    COMMENT "Compiling libxaom"
 )
+
+add_custom_target(
+    LIBAOM ALL
+    DEPENDS ${AOM_BUILD}/libaom.a
+    COMMENT "Building libaom"
+)
+
 include_directories(${AOM_INCLUDE})
 link_directories(${AOM_BUILD})
 
@@ -214,8 +251,22 @@ option (BUILD_SHARED_LIBS "Build shared libraries" ON)
 set(BUILD_SHARED_LIBS OFF) 
 
  set(PKG_CONFIG_NAME SvtAv1Enc)
-add_subdirectory(
- ${LIBSVTAV1_DIR} ${LIBSVTAV1_BUILD}
+# add_subdirectory(
+#  ${LIBSVTAV1_DIR} ${LIBSVTAV1_BUILD}
+# )
+add_custom_command(
+    OUTPUT ${LIBSVTAV1_LIB}/libSvtAv1Enc.a    
+    COMMAND cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="${FFMPEG_BUILD}" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF ..
+    #cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="$HOME/ffmpeg_build" -DCMAKE_BUILD_TYPE=Release -DBUILD_DEC=OFF -DBUILD_SHARED_LIBS=OFF ..
+    COMMAND make
+    WORKING_DIRECTORY ${LIBSVTAV1_BUILD}
+    COMMENT "Compiling libsvtav1"
+)
+
+add_custom_target(
+    LIBSVTAV1 ALL
+    DEPENDS ${LIBSVTAV1_LIB}/libSvtAv1Enc.a
+    COMMENT "Building libsvtav1"
 )
 include_directories(${LIBSVTAV1_INCLUDE})
 link_directories(${LIBSVTAV1_DIR}/Bin/Release)
@@ -612,34 +663,34 @@ add_custom_target(update_pc ALL
 #      COMMENT "Running FFmpeg configure script"
 #  )
 
-add_custom_target(configure_ffmpeg ALL
-     COMMAND ${CMAKE_COMMAND} -E env
-             PKG_CONFIG_PATH="/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig" 
-             /bin/bash -c "./configure \
-             --prefix='/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build' \
-             --pkg-config-flags='--static' \
-             --extra-cflags='-I/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/include' \
-             --extra-ldflags='-L/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib' \
-             --extra-libs='-lpthread -lm' \
-             --ld='g++' \
-             --enable-gpl \
-             --enable-gnutls \
-             --enable-libaom \
-             --enable-libass \
-             --enable-libfdk-aac \
-             --enable-libfreetype \
-             --enable-libmp3lame \
-             --enable-libopus \
-             --enable-libsvtav1 \
-             --enable-libdav1d \
-             --enable-libvorbis \
-             --enable-libvpx \
-             --enable-libx264 \
-             --enable-libx265 \
-             --enable-nonfree"
-     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
-     COMMENT "Running FFmpeg configure script"
- )
+#add_custom_target(configure_ffmpeg ALL
+#     COMMAND ${CMAKE_COMMAND} -E env
+#             PKG_CONFIG_PATH="/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig" 
+#             /bin/bash -c "./configure \
+#             --prefix='/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build' \
+#             --pkg-config-flags='--static' \
+#             --extra-cflags='-I/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/include' \
+#             --extra-ldflags='-L/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib' \
+#             --extra-libs='-lpthread -lm' \
+#             --ld='g++' \
+#             --enable-gpl \
+#             --enable-gnutls \
+#             --enable-libaom \
+#             --enable-libass \
+#             --enable-libfdk-aac \
+#             --enable-libfreetype \
+#             --enable-libmp3lame \
+#             --enable-libopus \
+#             --enable-libsvtav1 \
+#             --enable-libdav1d \
+#             --enable-libvorbis \
+#             --enable-libvpx \
+#             --enable-libx264 \
+#             --enable-libx265 \
+#             --enable-nonfree"
+#     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+#     COMMENT "Running FFmpeg configure script"
+# )
 
 
 #################################ffmpeg END
