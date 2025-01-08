@@ -23,3 +23,7 @@ git subtree add --prefix=external/dav1d https://code.videolan.org/videolan/dav1d
 
 
 git subtree add --prefix=external/vmaf https://github.com/Netflix/vmaf master --squash
+
+./update_prefix_and_libdir.sh ~/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig /home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/
+
+git subtree add --prefix=external/FFmpeg https://github.com/FFmpeg/FFmpeg.git master --squash

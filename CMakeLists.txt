@@ -5,6 +5,17 @@ project(SimpleFFmpegPlayer)
 
 
 set(EXTERNAL_DIR ${CMAKE_SOURCE_DIR}/external)
+
+
+set(FFMPEG_BUILD ${CMAKE_SOURCE_DIR}/build/ffmpeg_build)
+set(FFMPEG_BIN ${CMAKE_SOURCE_DIR}/build/bin)
+set(FFMPEG_BUILD_LIB ${FFMPEG_BUILD}/lib)
+
+file(MAKE_DIRECTORY ${FFMPEG_BUILD})
+file(MAKE_DIRECTORY ${FFMPEG_BIN})
+file(MAKE_DIRECTORY ${FFMPEG_BUILD}/lib)
+
+
 file(MAKE_DIRECTORY ${EXTERNAL_DIR})
 
 add_custom_target(run_script ALL
@@ -59,9 +70,10 @@ add_custom_target (
 #################################x265 BEGIN
 set(X265_DIR ${CMAKE_SOURCE_DIR}/external/x265)
 set(X265_LIB ${X265_DIR}/build/linux)
-set(X265_INCLUDE ${X265_LIB})
+set(X265_INCLUDE ${X265_DIR}/source)
 set(X265_SRC ${X265_DIR}/source)
 
+set(PKG_CONFIG_NAME x265)
 add_subdirectory(${X265_SRC} ${X265_LIB})
 
 include_directories(${X265_INCLUDE})
@@ -176,7 +188,7 @@ set(AOM_INCLUDE ${AOM_DIR}/aom)
 # file(MAKE_DIRECTORY ${AOM_LIB})
 file(MAKE_DIRECTORY ${AOM_BUILD})
 
- 
+set(PKG_CONFIG_NAME aom) 
 add_subdirectory(
   ${AOM_DIR} ${AOM_BUILD}
 )
@@ -194,11 +206,14 @@ set(LIBSVTAV1_DIR ${CMAKE_SOURCE_DIR}/external/libsvtav1 )
 set(LIBSVTAV1_BUILD ${LIBSVTAV1_DIR}/build)
 # set(AOM_LIB ${AOM_DIR}/build_lib)
 set(LIBSVTAV1_INCLUDE ${LIBSVTAV1_DIR}/Source/API)
-
+set(LIBSVTAV1_LIB ${LIBSVTAV1_DIR}/Bin/Release)
 # file(MAKE_DIRECTORY ${AOM_LIB})
 file(MAKE_DIRECTORY ${LIBSVTAV1_BUILD})
 
- 
+option (BUILD_SHARED_LIBS "Build shared libraries" ON)
+set(BUILD_SHARED_LIBS OFF) 
+
+ set(PKG_CONFIG_NAME SvtAv1Enc)
 add_subdirectory(
  ${LIBSVTAV1_DIR} ${LIBSVTAV1_BUILD}
 )
@@ -253,7 +268,7 @@ set(LIBVMAF_BUILD ${LIBVMAF_DIR}/build_lib)
 
 set(LIBVMAF_BIN ${LIBVMAF_BUILD}/bin)
 set(LIBVMAF_LIB ${LIBVMAF_BUILD}/lib)
-set(LIBVMAF_INCLUDE ${LIBVMAF_BUILD}/include)
+set(LIBVMAF_INCLUDE ${LIBVMAF_DIR}/include)
 
 file(MAKE_DIRECTORY ${LIBVMAF_BUILD})
 file(MAKE_DIRECTORY ${LIBVMAF_LIB})
@@ -285,6 +300,182 @@ link_directories(${LIBVMAF_LIB})
 #################################libvmaf END
 
 #################################ffmpeg BEGIN
+
+
+
+
+
+#################################X264 FILES COPY BEGIN
+add_custom_target(COPY_X264LIB ALL
+    WORKING_DIRECTORY ${X264_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMENT "Copy lib files X264"
+)
+
+add_custom_target(COPY_X264INCLUDE ALL
+    WORKING_DIRECTORY ${X264_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${X264_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files X264"
+)
+#################################X264 FILES COPY END
+
+
+#################################X265 FILES COPY BEGIN
+
+
+add_custom_target(COPY_X265LIB ALL
+    WORKING_DIRECTORY ${X265_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files X265"
+)
+
+add_custom_target(COPY_X265INCLUDE ALL
+    WORKING_DIRECTORY ${X265_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${X265_INCLUDE}/*.h ${FFMPEG_BUILD}/include " 2>/dev/null || true    
+    COMMENT "Copy header files X265"
+)
+
+#################################X265 FILES COPY END
+
+
+#################################AOM FILES COPY BEGIN
+add_custom_target(COPY_AOMLIB ALL
+    WORKING_DIRECTORY ${AOM_BUILD}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files AOM"
+)
+
+add_custom_target(COPY_AOMINCLUDE ALL
+    WORKING_DIRECTORY ${AOM_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${AOM_INCLUDE} ${FFMPEG_BUILD}/include " 2>/dev/null || true    
+    COMMENT "Copy header files AOM"
+)
+
+#################################AOM FILES COPY END
+
+
+#################################LIBVPX FILES COPY BEGIN
+
+add_custom_target(COPY_LIBVPX ALL
+    WORKING_DIRECTORY ${LIBVPX_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files LIBVPX"
+)
+
+add_custom_target(COPY_VPXINCLUDE ALL
+    WORKING_DIRECTORY ${LIBVPX_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBVPX_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files LIBVPX"
+)
+
+#################################LIBVPX FILES COPY END
+
+#################################FDKAAC FILES COPY BEGIN
+
+add_custom_target(COPY_LIBFDKAAC ALL
+    WORKING_DIRECTORY ${LIBFDKAAC_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files LIBFDKAAC"
+)
+
+add_custom_target(COPY_FDKAACINCLUDE ALL
+    WORKING_DIRECTORY ${LIBFDKAAC_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBFDKAAC_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files FDKAAC"
+)
+
+#################################FDKAAC FILES COPY END
+
+#################################OPUS FILES COPY BEGIN
+
+add_custom_target(COPY_LIBOPUS ALL
+    WORKING_DIRECTORY ${LIBOPUS_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files LIBFDKAAC"
+)
+
+add_custom_target(COPY_OPUSINCLUDE ALL
+    WORKING_DIRECTORY ${LIBOPUS_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBOPUS_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files OPUS"
+)
+
+#################################OPUS FILES COPY END
+
+
+#################################BSVTAV1 FILES COPY BEGIN
+
+add_custom_target(COPY_LIBSVTAV1 ALL
+    WORKING_DIRECTORY ${LIBSVTAV1_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files BSVTAV1"
+)
+
+
+add_custom_target(COPY_CP_BUILD ALL
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build
+    COMMAND /bin/bash -c "cp ./*.pc ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true
+    COMMENT "Copy pc files COPY_CP_BUILD"
+)
+
+add_custom_target(COPY_BSVTAV1INCLUDE ALL
+    WORKING_DIRECTORY ${LIBSVTAV1_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBSVTAV1_INCLUDE} ${FFMPEG_BUILD}/include/svt-av1" 2>/dev/null || true    
+    COMMENT "Copy header files BSVTAV1 ${LIBSVTAV1_INCLUDE} ${FFMPEG_BUILD}/include/svt-av1"
+)
+
+#################################BSVTAV1 FILES COPY END
+
+#################################DAV1D FILES COPY BEGIN
+
+add_custom_target(COPY_LIBDAV1D ALL
+    WORKING_DIRECTORY ${LIBDAV1D_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files LIBFDKAAC"
+)
+
+add_custom_target(COPY_DAV1DINCLUDE ALL
+    WORKING_DIRECTORY ${LIBDAV1D_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBDAV1D_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files DAV1D"
+)
+
+#################################DAV1D FILES COPY END
+
+#################################VMAF FILES COPY BEGIN
+
+add_custom_target(COPY_LIBVMAF ALL
+    WORKING_DIRECTORY ${LIBVMAF_LIB}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files LIBFDKAAC"
+)
+
+add_custom_target(COPY_VMAFINCLUDE ALL
+    WORKING_DIRECTORY ${LIBVMAF_INCLUDE}
+    COMMAND /bin/bash -c "cp -r ${LIBVMAF_INCLUDE} ${FFMPEG_BUILD} " 2>/dev/null || true    
+    COMMENT "Copy header files VMAF"
+)
+
+#################################VMAF FILES COPY END
+
+# add_custom_target(COPY_X265LIB ALL
+#     WORKING_DIRECTORY ${X265_LIB}
+#     COMMAND /bin/bash -c "cp -r ./*.a ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+#     COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+#     COMMENT "Copy lib filex X265"
+# )
+
+
+
+
 
 # ffmpeg path
 set(FFMPEG_INCLUDE_DIR external/ffmpeg)
