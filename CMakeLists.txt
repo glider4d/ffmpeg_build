@@ -11,19 +11,43 @@ set(FFMPEG_BUILD ${CMAKE_SOURCE_DIR}/build/ffmpeg_build)
 set(FFMPEG_BIN ${CMAKE_SOURCE_DIR}/build/bin)
 set(FFMPEG_BUILD_LIB ${FFMPEG_BUILD}/lib)
 
-file(MAKE_DIRECTORY ${FFMPEG_BUILD})
-file(MAKE_DIRECTORY ${FFMPEG_BIN})
-file(MAKE_DIRECTORY ${FFMPEG_BUILD}/lib)
+# file(MAKE_DIRECTORY ${FFMPEG_BUILD})
+# file(MAKE_DIRECTORY ${FFMPEG_BIN})
+# file(MAKE_DIRECTORY ${FFMPEG_BUILD}/lib)
 
 
-file(MAKE_DIRECTORY ${EXTERNAL_DIR})
+# file(MAKE_DIRECTORY ${EXTERNAL_DIR})
 
-add_custom_target(run_script ALL
+# add_custom_target(run_script ALL
+#     COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/init.sh
+#     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+#     COMMENT "Running iniy.sh"
+# )
+
+execute_process(
     COMMAND /bin/bash ${CMAKE_SOURCE_DIR}/init.sh
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Running iniy.sh"
+    RESULT_VARIABLE INIT_RESULT
+    OUTPUT_VARIABLE INIT_OUTPUT
+    ERROR_VARIABLE INIT_ERROR
 )
 
+if (NOT INIT_RESULT EQUAL 0)
+    message(FATAL_ERROR "Error during run_script:\n${INIT_ERROR}")
+endif()
+
+message(STATUS "run_script output:\n${INIT_OUTPUT}")
+
+
+add_custom_target(create_directories
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${FFMPEG_BUILD}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${FFMPEG_BIN}
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${FFMPEG_BUILD}/lib
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${EXTERNAL_DIR}
+    COMMENT "Creating required directories"
+)
+
+add_dependencies(create_directories run_script)
 
 
 #################################x264 BEGIN
