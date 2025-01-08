@@ -469,6 +469,16 @@ add_custom_target(COPY_LIBSVTAV1 ALL
 )
 
 
+
+add_custom_target(COPY_LIBSVTAV1_BUILD ALL
+    WORKING_DIRECTORY ${LIBSVTAV1_BUILD}
+    COMMAND /bin/bash -c "cp -r ./*.a ./*.la ./*.so ./*.so.* ./pkgconfig ${FFMPEG_BUILD}/lib " 2>/dev/null || true    
+    COMMAND /bin/bash -c "cp -r ./*.pc  ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true    
+    COMMENT "Copy lib files BSVTAV1"
+)
+
+
+
 add_custom_target(COPY_CP_BUILD ALL
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/build
     COMMAND /bin/bash -c "cp ./*.pc ${FFMPEG_BUILD}/lib/pkgconfig " 2>/dev/null || true
@@ -663,14 +673,44 @@ add_custom_target(update_pc ALL
 #      COMMENT "Running FFmpeg configure script"
 #  )
 
-#add_custom_target(configure_ffmpeg ALL
-#     COMMAND ${CMAKE_COMMAND} -E env
-#             PKG_CONFIG_PATH="/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib/pkgconfig" 
+add_custom_target(configure_ffmpeg ALL
+    COMMAND ${CMAKE_COMMAND} -E env
+            PKG_CONFIG_PATH="${FFMPEG_BUILD}/lib/pkgconfig" 
+            /bin/bash -c "./configure \
+            --prefix=${FFMPEG_BUILD} \
+            --pkg-config-flags='--static' \
+            --extra-cflags=-I${FFMPEG_BUILD}/include \
+            --extra-ldflags=-L${FFMPEG_BUILD}/lib \
+            --extra-libs='-lpthread -lm' \
+            --ld='g++' \
+            --enable-gpl \
+            --enable-gnutls \
+            --enable-libaom \
+            --enable-libass \
+            --enable-libfdk-aac \
+            --enable-libfreetype \
+            --enable-libmp3lame \
+            --enable-libopus \
+            --enable-libsvtav1 \
+            --enable-libdav1d \
+            --enable-libvorbis \
+            --enable-libvpx \
+            --enable-libx264 \
+            --enable-nonfree"
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
+    COMMAND make
+    COMMAND make install
+    COMMENT "Running FFmpeg configure script"
+)
+# add_custom_target(configure_ffmpeg ALL
+#     COMMAND ${CMAKE_COMMAND} 
+#             -E env
+#             PKG_CONFIG_PATH="/home/glider/ffmpeg1/lib/pkgconfig" 
 #             /bin/bash -c "./configure \
-#             --prefix='/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build' \
+#             --prefix='/home/glider/repo_emcc/ffmpeg/ffmpeg_build/build/ffmpeg_build' \
 #             --pkg-config-flags='--static' \
-#             --extra-cflags='-I/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/include' \
-#             --extra-ldflags='-L/home/glider/repo_emcc/ffmpeg2/ffmpeg_build/build/ffmpeg_build/lib' \
+#             --extra-cflags='-I/home/glider/repo_emcc/ffmpeg/ffmpeg_build/build/ffmpeg_build/include' \
+#             --extra-ldflags='-L/home/glider/repo_emcc/ffmpeg/ffmpeg_build/build/ffmpeg_build/lib' \
 #             --extra-libs='-lpthread -lm' \
 #             --ld='g++' \
 #             --enable-gpl \
@@ -691,7 +731,6 @@ add_custom_target(update_pc ALL
 #     WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/external/ffmpeg"
 #     COMMENT "Running FFmpeg configure script"
 # )
-
 
 #################################ffmpeg END
 
